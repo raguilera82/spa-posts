@@ -18,9 +18,7 @@ describe("All posts Use Case", () => {
       };
     });
 
-    const useCase = new AllPostsUseCase();
-    const posts = await useCase.execute();
-    console.log("TCL: posts", posts);
+    const posts = await AllPostsUseCase.execute();
 
     expect(posts).toHaveLength(POSTS.length);
   });

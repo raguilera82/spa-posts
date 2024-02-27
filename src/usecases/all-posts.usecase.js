@@ -8,7 +8,7 @@ export class AllPostsUseCase {
    * @returns {Promise<import("../model/post").PostType[]>}
    */
 
-  async execute() {
+  static async execute() {
     const repository = new PostsRepository();
     const posts = await repository.getAllPosts();
     return posts.map(

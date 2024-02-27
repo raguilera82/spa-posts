@@ -5,7 +5,7 @@ export class CreatePostUseCase {
    *
    * @param {import("../model/post").PostType[]} posts
    * @param {import("../model/post").PostType} post
-   * @returns
+   * @returns {Promise<import("../model/post").PostType[]>}
    */
   static async execute(posts, post) {
     const repository = new PostsRepository();
