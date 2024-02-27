@@ -1,18 +1,16 @@
-import './../components/posts.component';
+import "./../components/posts-mediator.component";
 
 export class PostsPage extends HTMLElement {
+  constructor() {
+    super();
+  }
 
-    constructor() {
-        super();
-    }
-
-    connectedCallback() {
-        this.innerHTML = `
-            <h1>Posts Page</h1>
-            <genk-posts></genk-posts>
+  connectedCallback() {
+    this.innerHTML = `
+            <h1>Posts Page</h1>     
+            <genk-posts-mediator></genk-posts-mediator>    
         `;
-    }
-
+  }
 }
 
-customElements.define('posts-page-genk', PostsPage);
+customElements.define("posts-page-genk", PostsPage);

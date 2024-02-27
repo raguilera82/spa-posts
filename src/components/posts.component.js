@@ -13,14 +13,8 @@ export class PostsComponent extends LitElement {
     };
   }
 
-  async connectedCallback() {
-    super.connectedCallback();
-    this.posts = await AllPostsUseCase.execute();
-  }
-
   async allOdds() {
-    const oddPostsUseCase = new OddPostsUseCase();
-    this.posts = await oddPostsUseCase.execute();
+    this.posts = await OddPostsUseCase.execute(this.posts);
   }
 
   render() {
