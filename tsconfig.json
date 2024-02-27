@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "checkJs": true,
+      "allowJs": true,
+      "strict": false,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "module": "esnext",
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "target": "esnext",
+      "lib": ["dom", "dom.iterable", "esnext"],
+      "types": ["lit"]
+    },
+    "include": ["src/**/*.js", "src/**/*.ts"],
+    "exclude": ["node_modules"]
+  }
+  

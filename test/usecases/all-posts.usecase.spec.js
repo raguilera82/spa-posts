@@ -1,30 +1,27 @@
-import { PostsRepository } from "../../src/repositories/posts.repository"
-import { AllPostsUseCase } from "../../src/usecases/all-posts.usecase"
-import POSTS from './../../fixtures/posts.json';
+import { PostsRepository } from "../../src/repositories/posts.repository";
+import { AllPostsUseCase } from "../../src/usecases/all-posts.usecase";
+import POSTS from "./../../fixtures/posts.json";
 
-jest.mock('../../src/repositories/posts.repository');
+jest.mock("../../src/repositories/posts.repository");
 
-describe('All posts Use Case', () => {
+describe("All posts Use Case", () => {
+  beforeEach(() => {
+    PostsRepository.mockClear();
+  });
 
-    beforeEach(() => {
-        PostsRepository.mockClear();
-    })
+  it("should execute correct", async () => {
+    PostsRepository.mockImplementation(() => {
+      return {
+        getAllPosts: () => {
+          return POSTS;
+        },
+      };
+    });
 
-    it('should execute correct', async () => {
+    const useCase = new AllPostsUseCase();
+    const posts = await useCase.execute();
+    console.log("TCL: posts", posts);
 
-        PostsRepository.mockImplementation(() => {
-            return {
-                getAllPosts: () => {
-                    return POSTS;
-                }
-            }
-        })
-
-        const useCase = new AllPostsUseCase();
-        const posts = await useCase.execute();
-
-        expect(posts).toHaveLength(POSTS.length);
-
-    })
-
-})
+    expect(posts).toHaveLength(POSTS.length);
+  });
+});
