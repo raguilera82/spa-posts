@@ -3,6 +3,7 @@ import { BaseBloc } from "./base";
 import { AllPostsUseCase } from "../usecases/all-posts.usecase";
 import { CreatePostUseCase } from "../usecases/create-post.usecase";
 import { DeletePostUseCase } from "../usecases/delete-post.usecase";
+import { OddPostsUseCase } from "../usecases/odd-posts.usecase";
 import { UpdatePostUseCase } from "../usecases/update-post.usecase";
 
 export class PostsBloc extends BaseBloc {
@@ -79,5 +80,10 @@ export class PostsBloc extends BaseBloc {
     this.setState({
       selectedPost: post,
     });
+  }
+
+  oddPosts() {
+    const posts = this.getState().posts;
+    return OddPostsUseCase.execute(posts);
   }
 }

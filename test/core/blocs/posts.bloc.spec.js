@@ -1,27 +1,35 @@
+import axios from "axios";
 import { v4 } from "uuid";
 import { PostsBloc } from "../../../src/core/blocs/posts.bloc";
-import { PostsRepository } from "../../../src/core/repositories/posts.repository";
 import POSTS from "./../../../fixtures/posts.json";
-
-jest.mock("../../../src/core/repositories/posts.repository");
+jest.mock("axios");
 
 describe("Post Bloc", () => {
   beforeEach(() => {
-    PostsRepository.mockClear();
+    axios.mockClear();
   });
 
   it("should load posts", async () => {
-    PostsRepository.mockImplementation(() => {
-      return {
-        getAllPosts: () => {
-          return POSTS;
-        },
-      };
+    axios.get.mockResolvedValueOnce({
+      status: 200,
+      data: POSTS,
     });
 
     const bloc = PostsBloc.getInstance();
     await bloc.loadPosts();
     expect(bloc.state.posts.length).toBeGreaterThan(0);
+  });
+
+  it("should odd posts", async () => {
+    axios.get.mockResolvedValueOnce({
+      status: 200,
+      data: POSTS,
+    });
+
+    const bloc = PostsBloc.getInstance();
+    await bloc.loadPosts();
+    const oddPosts = bloc.oddPosts();
+    expect(oddPosts.length).toBe(50);
   });
 
   it("should create a posts", async () => {
@@ -34,24 +42,23 @@ describe("Post Bloc", () => {
       content: "Content new post",
     };
 
-    PostsRepository.mockImplementation(() => {
-      return {
-        getAllPosts: () => {
-          return POSTS;
-        },
-        addPost: jest.fn().mockResolvedValue({
-          id: 101,
-          title: newPost.heading,
-          body: newPost.content,
-        }),
-      };
-    });
-
     const bloc = PostsBloc.getInstance();
+    axios.get.mockResolvedValueOnce({
+      status: 200,
+      data: POSTS,
+    });
     await bloc.loadPosts();
 
     const postsBeforeCreate = bloc.getState().posts;
 
+    axios.post.mockResolvedValue({
+      status: 200,
+      data: {
+        id: 101,
+        title: newPost.heading,
+        body: newPost.content,
+      },
+    });
     await bloc.createPost(newPost);
 
     const postsUpdated = bloc.getState().posts;
@@ -63,32 +70,36 @@ describe("Post Bloc", () => {
 
   it("should delete a post", async () => {
     const postId = v4();
-    const post = {
+    const newPost = {
       postId,
       heading: "Post para borrar",
       content: "Post para borrar",
     };
 
-    PostsRepository.mockImplementation(() => {
-      return {
-        addPost: jest.fn().mockResolvedValue({
-          id: 101,
-          title: post.heading,
-          body: post.content,
-        }),
-        getAllPosts: jest.fn().mockResolvedValue(POSTS),
-        deletePost: jest.fn(),
-      };
-    });
-
     const bloc = PostsBloc.getInstance();
+    axios.get.mockResolvedValueOnce({
+      status: 200,
+      data: POSTS,
+    });
     await bloc.loadPosts();
     const posts = bloc.getState().posts;
 
-    await bloc.createPost(post);
+    axios.post.mockResolvedValue({
+      status: 200,
+      data: {
+        id: 101,
+        title: newPost.heading,
+        body: newPost.content,
+      },
+    });
+    await bloc.createPost(newPost);
 
-    bloc.selectPost(post);
+    bloc.selectPost(newPost);
 
+    axios.delete.mockResolvedValue({
+      status: 200,
+      data: {},
+    });
     await bloc.deletePost();
     const postsDeleted = bloc.getState().posts;
 
@@ -103,33 +114,39 @@ describe("Post Bloc", () => {
       content: "New post content",
     };
 
-    PostsRepository.mockImplementation(() => {
-      return {
-        addPost: jest.fn().mockResolvedValue({
-          id: 101,
-          title: newPost.heading,
-          body: newPost.content,
-        }),
-        getAllPosts: jest.fn().mockResolvedValue(POSTS),
-        updatePost: jest.fn().mockResolvedValue(),
-      };
-    });
     const postWithChanges = {
       heading: "Post con los cambios",
       content: "Post con contenido cambiado",
     };
 
     const bloc = PostsBloc.getInstance();
+
+    axios.get.mockResolvedValueOnce({
+      status: 200,
+      data: POSTS,
+    });
     await bloc.loadPosts();
 
+    axios.post.mockResolvedValue({
+      status: 200,
+      data: {
+        id: 101,
+        title: newPost.heading,
+        body: newPost.content,
+      },
+    });
     await bloc.createPost(newPost);
     const postsWithNewPost = bloc.getState().posts;
 
     bloc.selectPost(newPost);
 
+    axios.delete.mockResolvedValue({
+      status: 200,
+      data: {},
+    });
     await bloc.updatePost(postWithChanges);
-    const postsUpdated = bloc.getState().posts;
 
+    const postsUpdated = bloc.getState().posts;
     expect(postsUpdated.length).toBe(postsWithNewPost.length);
   });
 });

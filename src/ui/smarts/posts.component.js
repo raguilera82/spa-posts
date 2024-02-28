@@ -1,6 +1,5 @@
 import { html, LitElement } from "lit";
 import { PostsBloc } from "../../core/blocs/posts.bloc";
-import { OddPostsUseCase } from "../../core/usecases/odd-posts.usecase";
 import "../dumbs/posts.ui";
 
 export class PostsComponent extends LitElement {
@@ -20,7 +19,7 @@ export class PostsComponent extends LitElement {
   }
 
   async allOdds() {
-    this.posts = await OddPostsUseCase.execute(this.posts);
+    this.posts = this.postsBloc.oddPosts();
     this.requestUpdate();
   }
 
