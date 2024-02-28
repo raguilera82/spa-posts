@@ -3,16 +3,19 @@ import { v4 } from "uuid";
 import { PostsBloc } from "../../core/blocs/posts.bloc";
 
 export class PostActionsComponent extends LitElement {
-  static get properties() {
-    return {
-      posts: {
-        type: Array,
-      },
-      selectedPost: {
-        type: Object,
-        state: true,
-      },
+  connectedCallback() {
+    super.connectedCallback();
+    this.postsBloc = PostsBloc.getInstance();
+    this.handleState = (state) => {
+      this.selectedPost = state.selectedPost;
+      this.requestUpdate();
     };
+    this.postsBloc.subscribe(this.handleState);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.postsBloc.unsubscribe(this.handleState);
   }
 
   render() {
@@ -37,10 +40,7 @@ export class PostActionsComponent extends LitElement {
         Cancel
       </button>
       ${this.selectedPost
-        ? html`<button
-              id="deleteButton"
-              @click="${(e) => this.deletePost(e, this.selectedPost)}"
-            >
+        ? html`<button id="deleteButton" @click="${(e) => this.deletePost(e)}">
               Delete
             </button>
             <button
@@ -57,15 +57,13 @@ export class PostActionsComponent extends LitElement {
 
   cancel(e) {
     e.preventDefault();
-    this.selectedPost = null;
+    this.postsBloc.selectPost(null);
   }
 
-  async deletePost(e, selectedPost) {
+  async deletePost(e) {
     e.preventDefault();
-    const bloc = PostsBloc.getInstance();
-    bloc.selectPost(selectedPost);
-    await bloc.deletePost();
-    this.posts = bloc.getState().posts;
+    await this.postsBloc.deletePost();
+    this.posts = this.postsBloc.getState().posts;
     this.notifyChangePosts(this.posts);
   }
 
@@ -74,14 +72,13 @@ export class PostActionsComponent extends LitElement {
     const title = this.querySelector("#title").value;
     const content = this.querySelector("#content").value;
 
-    const bloc = PostsBloc.getInstance();
-    await bloc.createPost({
+    await this.postsBloc.createPost({
       postId: v4(),
       heading: title,
       content: content,
     });
 
-    this.posts = bloc.getState().posts;
+    this.posts = this.postsBloc.getState().posts;
     this.notifyChangePosts(this.posts);
   }
 
@@ -90,15 +87,14 @@ export class PostActionsComponent extends LitElement {
     const title = this.querySelector("#title").value;
     const content = this.querySelector("#content").value;
 
-    const bloc = PostsBloc.getInstance();
-    bloc.selectPost(selectedPost);
+    this.postsBloc.selectPost(selectedPost);
 
-    await bloc.updatePost({
+    await this.postsBloc.updatePost({
       heading: title,
       content,
     });
 
-    this.posts = bloc.getState().posts;
+    this.posts = this.postsBloc.getState().posts;
 
     this.notifyChangePosts(this.posts);
   }
@@ -112,6 +108,7 @@ export class PostActionsComponent extends LitElement {
       })
     );
     this.clearForm();
+    this.postsBloc.selectPost(null);
   }
 
   clearForm() {

@@ -10,7 +10,8 @@
     "test": "jest --passWithNoTests --coverage",
     "lint": "semistandard --fix",
     "cy:open": "cypress open",
-    "cy:test": "cypress run"
+    "cy:test": "cypress run",
+    "test:all": "npm run test && start-server-and-test start http-get://localhost:8080/ cy:test"
   },
   "commitlint": {
     "extends": "@commitlint/config-conventional"
@@ -59,6 +60,7 @@
     "jsdom": "^24.0.0",
     "mini-css-extract-plugin": "^2.6.0",
     "semistandard": "^16.0.1",
+    "start-server-and-test": "^2.0.3",
     "style-loader": "^3.3.1",
     "typescript": "^5.3.3",
     "webpack": "^5.72.0",

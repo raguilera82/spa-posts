@@ -20,13 +20,6 @@ it("user add a post", () => {
   cy.contains("My post");
 });
 
-it("user delete a post", () => {
-  cy.visit("/posts");
-  cy.get("#post_1").click();
-  cy.get("#deleteButton").click();
-  cy.get("#post_1").should("not.exist");
-});
-
 it("user update a post", () => {
   cy.visit("/posts");
   cy.get("#post_1").click();
@@ -35,4 +28,11 @@ it("user update a post", () => {
   cy.get("#content").type("My content");
   cy.get("#updateButton").click();
   cy.contains("My post mod");
+});
+
+it("user delete a post", () => {
+  cy.visit("/posts");
+  cy.get("#post_1").click();
+  cy.get("#deleteButton").click();
+  cy.get("#post_1").should("not.exist");
 });

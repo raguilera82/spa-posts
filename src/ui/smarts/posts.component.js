@@ -1,25 +1,40 @@
 import { html, LitElement } from "lit";
+import { PostsBloc } from "../../core/blocs/posts.bloc";
 import { OddPostsUseCase } from "../../core/usecases/odd-posts.usecase";
 import "../dumbs/posts.ui";
 
 export class PostsComponent extends LitElement {
-  static get properties() {
-    return {
-      posts: {
-        type: Array,
-        state: true,
-      },
+  connectedCallback() {
+    super.connectedCallback();
+    this.postsBloc = PostsBloc.getInstance();
+    this.handleState = (state) => {
+      this.posts = state.posts;
+      this.requestUpdate();
     };
+    this.postsBloc.subscribe(this.handleState);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.postsBloc.unsubscribe(this.handleState);
   }
 
   async allOdds() {
     this.posts = await OddPostsUseCase.execute(this.posts);
+    this.requestUpdate();
+  }
+
+  handleSelectedPost(e) {
+    this.postsBloc.selectPost(e.detail.selectedPost);
   }
 
   render() {
     return html`
       <button @click="${this.allOdds}" id="oddAction">Odd</button>
-      <posts-ui .posts="${this.posts}"></posts-ui>
+      <posts-ui
+        @selected-post="${(e) => this.handleSelectedPost(e)}"
+        .posts="${this.posts}"
+      ></posts-ui>
     `;
   }
 

@@ -15,7 +15,6 @@ export class PostsUI extends LitElement {
         detail: {
           selectedPost: post,
         },
-        bubbles: true,
       })
     );
   }
