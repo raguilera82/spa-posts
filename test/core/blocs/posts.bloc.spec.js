@@ -115,7 +115,6 @@ describe("Post Bloc", () => {
       };
     });
     const postWithChanges = {
-      postId: postId,
       heading: "Post con los cambios",
       content: "Post con contenido cambiado",
     };
@@ -126,9 +125,9 @@ describe("Post Bloc", () => {
     await bloc.createPost(newPost);
     const postsWithNewPost = bloc.getState().posts;
 
-    bloc.selectPost(postWithChanges);
+    bloc.selectPost(newPost);
 
-    await bloc.updatePost();
+    await bloc.updatePost(postWithChanges);
     const postsUpdated = bloc.getState().posts;
 
     expect(postsUpdated.length).toBe(postsWithNewPost.length);

@@ -1,8 +1,6 @@
 import { LitElement, html } from "lit";
 import { v4 } from "uuid";
-import { CreatePostUseCase } from "../../core/usecases/create-post.usecase";
-import { DeletePostUseCase } from "../../core/usecases/delete-post.usecase";
-import { UpdatePostUseCase } from "../../core/usecases/update-post.usecase";
+import { PostsBloc } from "../../core/blocs/posts.bloc";
 
 export class PostActionsComponent extends LitElement {
   static get properties() {
@@ -64,10 +62,10 @@ export class PostActionsComponent extends LitElement {
 
   async deletePost(e, selectedPost) {
     e.preventDefault();
-    this.posts = await DeletePostUseCase.execute(
-      this.posts,
-      selectedPost.postId
-    );
+    const bloc = PostsBloc.getInstance();
+    bloc.selectPost(selectedPost);
+    await bloc.deletePost();
+    this.posts = bloc.getState().posts;
     this.notifyChangePosts(this.posts);
   }
 
@@ -75,11 +73,15 @@ export class PostActionsComponent extends LitElement {
     e.preventDefault();
     const title = this.querySelector("#title").value;
     const content = this.querySelector("#content").value;
-    this.posts = await CreatePostUseCase.execute(this.posts, {
+
+    const bloc = PostsBloc.getInstance();
+    await bloc.createPost({
       postId: v4(),
       heading: title,
       content: content,
     });
+
+    this.posts = bloc.getState().posts;
     this.notifyChangePosts(this.posts);
   }
 
@@ -87,11 +89,17 @@ export class PostActionsComponent extends LitElement {
     e.preventDefault();
     const title = this.querySelector("#title").value;
     const content = this.querySelector("#content").value;
-    this.posts = await UpdatePostUseCase.execute(this.posts, {
-      postId: selectedPost?.postId,
+
+    const bloc = PostsBloc.getInstance();
+    bloc.selectPost(selectedPost);
+
+    await bloc.updatePost({
       heading: title,
-      content: content,
+      content,
     });
+
+    this.posts = bloc.getState().posts;
+
     this.notifyChangePosts(this.posts);
   }
 

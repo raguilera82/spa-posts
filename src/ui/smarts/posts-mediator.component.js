@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { AllPostsUseCase } from "../../core/usecases/all-posts.usecase";
+import { PostsBloc } from "../../core/blocs/posts.bloc";
 import "./post-actions.component";
 import "./posts.component";
 
@@ -16,7 +16,10 @@ export class PostMediatorComponent extends LitElement {
   }
 
   async connectedCallback() {
-    this.posts = await AllPostsUseCase.execute();
+    const bloc = PostsBloc.getInstance();
+    await bloc.loadPosts();
+
+    this.posts = bloc.getState().posts;
     super.connectedCallback();
   }
 

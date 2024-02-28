@@ -56,11 +56,15 @@ export class PostsBloc extends BaseBloc {
     });
   }
 
-  async updatePost() {
+  async updatePost(post) {
     const selectedPost = this.getState().selectedPost;
     const postsWithUpdated = await UpdatePostUseCase.execute(
       this.getState().posts,
-      selectedPost
+      {
+        postId: selectedPost.postId,
+        heading: post.heading,
+        content: post.content,
+      }
     );
     this.setState({
       posts: postsWithUpdated,
