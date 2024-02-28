@@ -82,6 +82,10 @@ export class PostsBloc extends BaseBloc {
     });
   }
 
+  /**
+   *
+   * @returns {import("../model/post").PostType[]}
+   */
   oddPosts() {
     const posts = this.getState().posts;
     return OddPostsUseCase.execute(posts);
