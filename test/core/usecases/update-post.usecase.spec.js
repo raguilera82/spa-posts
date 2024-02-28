@@ -1,11 +1,11 @@
 import { v4 } from "uuid";
-import { PostsRepository } from "../../src/repositories/posts.repository";
-import { AllPostsUseCase } from "../../src/usecases/all-posts.usecase";
-import { CreatePostUseCase } from "../../src/usecases/create-post.usecase";
-import { UpdatePostUseCase } from "../../src/usecases/update-post.usecase";
-import POSTS from "./../../fixtures/posts.json";
+import { PostsRepository } from "../../../src/core/repositories/posts.repository";
+import { AllPostsUseCase } from "../../../src/core/usecases/all-posts.usecase";
+import { CreatePostUseCase } from "../../../src/core/usecases/create-post.usecase";
+import { UpdatePostUseCase } from "../../../src/core/usecases/update-post.usecase";
+import POSTS from "./../../../fixtures/posts.json";
 
-jest.mock("../../src/repositories/posts.repository");
+jest.mock("../../../src/core/repositories/posts.repository");
 
 describe("Update Post", () => {
   beforeEach(() => {

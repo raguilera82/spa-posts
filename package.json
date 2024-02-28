@@ -30,7 +30,8 @@
   "jest": {
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
-    }
+    },
+    "testEnvironment": "jsdom"
   },
   "browserslist": [
     "defaults",
@@ -54,6 +55,8 @@
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.4",
     "jest": "^28.0.2",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^24.0.0",
     "mini-css-extract-plugin": "^2.6.0",
     "semistandard": "^16.0.1",
     "style-loader": "^3.3.1",

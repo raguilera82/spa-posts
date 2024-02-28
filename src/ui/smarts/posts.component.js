@@ -1,7 +1,6 @@
 import { html, LitElement } from "lit";
-import { AllPostsUseCase } from "../usecases/all-posts.usecase";
-import { OddPostsUseCase } from "../usecases/odd-posts.usecase";
-import "./../ui/posts.ui";
+import { OddPostsUseCase } from "../../core/usecases/odd-posts.usecase";
+import "../dumbs/posts.ui";
 
 export class PostsComponent extends LitElement {
   static get properties() {

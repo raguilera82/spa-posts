@@ -1,4 +1,4 @@
-import "./../components/posts-mediator.component";
+import "../smarts/posts-mediator.component";
 
 export class PostsPage extends HTMLElement {
   constructor() {

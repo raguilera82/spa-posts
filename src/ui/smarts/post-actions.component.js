@@ -1,8 +1,8 @@
 import { LitElement, html } from "lit";
 import { v4 } from "uuid";
-import { CreatePostUseCase } from "../usecases/create-post.usecase";
-import { DeletePostUseCase } from "../usecases/delete-post.usecase";
-import { UpdatePostUseCase } from "../usecases/update-post.usecase";
+import { CreatePostUseCase } from "../../core/usecases/create-post.usecase";
+import { DeletePostUseCase } from "../../core/usecases/delete-post.usecase";
+import { UpdatePostUseCase } from "../../core/usecases/update-post.usecase";
 
 export class PostActionsComponent extends LitElement {
   static get properties() {

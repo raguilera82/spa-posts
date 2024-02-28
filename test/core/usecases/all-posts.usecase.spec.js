@@ -1,8 +1,8 @@
-import { PostsRepository } from "../../src/repositories/posts.repository";
-import { AllPostsUseCase } from "../../src/usecases/all-posts.usecase";
-import POSTS from "./../../fixtures/posts.json";
+import { PostsRepository } from "../../../src/core/repositories/posts.repository";
+import { AllPostsUseCase } from "../../../src/core/usecases/all-posts.usecase";
+import POSTS from "./../../../fixtures/posts.json";
 
-jest.mock("../../src/repositories/posts.repository");
+jest.mock("../../../src/core/repositories/posts.repository");
 
 describe("All posts Use Case", () => {
   beforeEach(() => {

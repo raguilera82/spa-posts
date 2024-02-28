@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { AllPostsUseCase } from "../usecases/all-posts.usecase";
+import { AllPostsUseCase } from "../../core/usecases/all-posts.usecase";
 import "./post-actions.component";
 import "./posts.component";
 

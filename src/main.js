@@ -1,5 +1,4 @@
-import './main.css';
-console.log('Vanilla');
-import './app';
+import "./main.css";
+console.log("Vanilla");
 
-import './router';
+import "./ui/router";
