@@ -63,8 +63,6 @@ export class PostActionsComponent extends LitElement {
   async deletePost(e) {
     e.preventDefault();
     await this.postsBloc.deletePost();
-    this.posts = this.postsBloc.getState().posts;
-    this.notifyChangePosts(this.posts);
   }
 
   async addPost(e) {
@@ -77,9 +75,6 @@ export class PostActionsComponent extends LitElement {
       heading: title,
       content: content,
     });
-
-    this.posts = this.postsBloc.getState().posts;
-    this.notifyChangePosts(this.posts);
   }
 
   async updatePost(e, selectedPost) {
@@ -93,27 +88,12 @@ export class PostActionsComponent extends LitElement {
       heading: title,
       content,
     });
-
-    this.posts = this.postsBloc.getState().posts;
-
-    this.notifyChangePosts(this.posts);
-  }
-
-  notifyChangePosts(posts) {
-    this.dispatchEvent(
-      new CustomEvent("change-posts", {
-        detail: {
-          posts: posts,
-        },
-      })
-    );
-    this.clearForm();
-    this.postsBloc.selectPost(null);
   }
 
   clearForm() {
     this.querySelector("#title").value = "";
     this.querySelector("#content").value = "";
+    this.postsBloc.selectPost(null);
   }
 
   createRenderRoot() {
